@@ -1,4 +1,7 @@
 #include <iostream>
+#include <utility>
+#include <string>
+
 #define NEW_LINE std::cout<<"\n"
 
 //print name for n times using recursion
@@ -90,6 +93,29 @@ unsigned int fact_func(unsigned int limit)
     return limit * fact_func(limit-1);
 }
 
+//Reverse an array using two pointers [Approach 1]
+void reverse_arr(unsigned int arr[],unsigned int left,unsigned int right)
+{
+    if(left>= right){
+        return;
+    }
+    std::swap(arr[left],arr[right]);
+    reverse_arr(arr,left+1,right-1);
+}
+
+//check string palindrome
+bool check_string_palindrome(std::string str,unsigned int start,unsigned int end)
+{
+    if(start>=end){
+        return true;
+    }
+    if(str[start]!=str[end]){
+        return false;
+    }
+    return check_string_palindrome(str,start+1,end-1);
+}
+
+
 int main()
 {
     print_name(5);
@@ -108,7 +134,26 @@ int main()
     NEW_LINE;
     fact_param(5);
     NEW_LINE;
-    std::cout<<"Factorial using functional way is :: "<<fact_func(10)<<std::endl;
-    
+    std::cout<<"Factorial using functional way is :: "<<fact_func(3)<<std::endl;
+
+    NEW_LINE;
+    //Declare array
+    unsigned int arr[] = {1,2,3,4,5};
+    unsigned int size = sizeof(arr)/sizeof(unsigned int);
+    NEW_LINE;
+    reverse_arr(arr,0,size-1);
+    std::cout<<"After reversing \n";
+    for(int i =0; i < size;i++)
+    {
+        std::cout<<arr[i]<<",";
+    }
+
+    NEW_LINE;
+
+    std::string name = "MADAM";
+    std::cout<<"String Palindrome :: "<<check_string_palindrome(name,0,name.size()-1);
+
+    NEW_LINE;
+
     return 0;
 }
