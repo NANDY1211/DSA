@@ -14,9 +14,10 @@ class LinkedList
     private:
     Node* head; //Head pointer to track the start of the node
     Node* tail; // tail pointer to track the end of the node
+    int length_;
 
     public:
-        LinkedList() : head(nullptr) , tail(nullptr) {}
+        LinkedList() : head(nullptr) , tail(nullptr) , length_(0) {}
 
         //CreateNode
         Node* createNode(int value)
@@ -47,6 +48,7 @@ class LinkedList
                 traverse = traverse->next;
                 delete delNode;
             }
+            length_ = 0;
         }
 
         //Destructor
@@ -65,12 +67,14 @@ class LinkedList
             {
                 Node* newNode = createNode(value);
                 head = tail = newNode;
+                length_++;
                 return;
             }
 
             Node* newNode = createNode(value);
             newNode->next = head;
             head = newNode;
+            length_++;
         }
 
         //Inserting node at back
@@ -81,6 +85,7 @@ class LinkedList
             {
                 Node* newNode = createNode(value);
                 head = tail = newNode;
+                length_++;
                 return;
             }
 
@@ -88,6 +93,7 @@ class LinkedList
             tail->next = newNode;
             newNode->next = nullptr;
             tail = newNode;
+            length_++;
         }
 
         //Inserting Node at specific position
@@ -111,6 +117,7 @@ class LinkedList
             Node* newNode = createNode(value);
             newNode->next = prev->next;
             prev->next = newNode;
+            length_++;
 
             if (newNode->next == nullptr) { // update tail if inserted at end
                 tail = newNode;
@@ -133,12 +140,14 @@ class LinkedList
             {
                 delete head;
                 head = tail = nullptr;
+                length_--;
                 return;
             }
 
             Node* delNode = head;
             head = head->next;
             delete delNode;
+            length_--;
         }
 
         //Remove at back
@@ -155,6 +164,7 @@ class LinkedList
             {
                 delete head;
                 head = tail = nullptr;
+                length_--;
                 return;
             }
 
@@ -167,6 +177,7 @@ class LinkedList
             prev->next = nullptr;
             tail = prev;
             delete delNode;
+            length_--;
         }
 
         //Remove at specific position
@@ -182,6 +193,7 @@ class LinkedList
             {
                 delete head;
                 head = tail = nullptr;
+                length_--;
                 return;
             }
             if(pos<1)
@@ -205,6 +217,7 @@ class LinkedList
             Node* after = prev->next;
             prev->next = after->next;
             delete after;
+            length_--;
         }
 
         //Search in the list
@@ -275,6 +288,12 @@ class LinkedList
             std::cout<<"NULL\n";
         }
 
+        //Length of an list
+        int length()
+        {
+            return length_;
+        }
+
 };
 int main()
 {
@@ -285,6 +304,9 @@ int main()
     list.pushBack(4);
     list.pushAt(5,5);
     list.reverse();
+
+
+    std::cout<<"Length of the list "<<list.length()<<std::endl;
 
 
     
