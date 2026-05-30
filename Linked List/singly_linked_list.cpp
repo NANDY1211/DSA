@@ -369,12 +369,33 @@ class LinkedList
         }
 
 
+        //Pairwise swap in linked list
+        void pairSwap()
+        {
+            if(head == nullptr || head->next == nullptr) return;
+
+
+            Node* current = head;
+            Node* adjacent = head->next;
+
+            while(adjacent!=nullptr)
+            {
+                int temp = current->data;
+                current->data = adjacent->data;
+                adjacent->data = temp;
+
+                current = adjacent->next;
+                adjacent = current->next;
+            }
+        }
+
+
 };
 int main()
 {
     LinkedList list;
     list.pushFront(1);
-    list.pushBack(1);
+    list.pushBack(2);
     list.pushAt(3,3);
     list.pushBack(4);
     list.pushAt(5,5);
@@ -393,7 +414,9 @@ int main()
     list.CircularToSingle();
     list.isCircular();
 
+    list.pairSwap();
 
-    //list.show();
+
+    list.show();
     return 0;
 }
