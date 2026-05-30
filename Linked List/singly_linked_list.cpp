@@ -337,6 +337,20 @@ class LinkedList
             }
         }
 
+        //check list is circular
+        void isCircular()
+        {
+            if(head == nullptr) return;
+
+
+            if(tail->next == head) 
+            {
+                std::cout<<"It is circular\n";
+                return;
+            }
+            std::cout<<"It is not circular\n";
+        }
+
 };
 int main()
 {
@@ -355,6 +369,7 @@ int main()
     list.mid();    
 
     list.occurence(1);
+    list.isCircular();
 
 
     list.show();
