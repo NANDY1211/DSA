@@ -294,6 +294,25 @@ class LinkedList
             return length_;
         }
 
+        //Find the middle of the list
+
+        void mid()
+        {
+            if(head == nullptr || head == tail) return;
+
+            int position = ((length()/2)+1);
+
+            Node* current = head;
+
+            for(int i=1;i<position;i++)
+            {
+                current = current->next;
+            }
+
+            std::cout<<"Middle of the list is "<<current->data<<std::endl;
+
+        }
+
 };
 int main()
 {
@@ -303,13 +322,13 @@ int main()
     list.pushAt(3,3);
     list.pushBack(4);
     list.pushAt(5,5);
-    list.reverse();
+
 
 
     std::cout<<"Length of the list "<<list.length()<<std::endl;
 
 
-    
+    list.mid();    
 
 
     list.show();
