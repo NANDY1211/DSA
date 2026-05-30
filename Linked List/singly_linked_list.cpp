@@ -351,6 +351,24 @@ class LinkedList
             std::cout<<"It is not circular\n";
         }
 
+        //Convert single linked list to circular list
+        void convertToCircular()
+        {
+            if(head == nullptr) return;
+
+            tail->next = head;
+        }
+
+        //Convert circular linked list to single linked list
+        void CircularToSingle()
+        {
+            if(head == nullptr) return;
+            
+            if(tail->next == head)
+                tail->next = nullptr;
+        }
+
+
 };
 int main()
 {
@@ -370,8 +388,12 @@ int main()
 
     list.occurence(1);
     list.isCircular();
+    list.convertToCircular();
+    list.isCircular();
+    list.CircularToSingle();
+    list.isCircular();
 
 
-    list.show();
+    //list.show();
     return 0;
 }
