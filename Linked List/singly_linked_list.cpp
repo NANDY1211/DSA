@@ -295,7 +295,6 @@ class LinkedList
         }
 
         //Find the middle of the list
-
         void mid()
         {
             if(head == nullptr || head == tail) return;
@@ -313,12 +312,37 @@ class LinkedList
 
         }
 
+        //Find Occurence of the element
+        void occurence(int key)
+        {
+            if(key == 0 || head == nullptr) return;
+
+
+            int count = 0;
+
+            Node* current = head;
+            while(current)
+            {
+                if(current->data == key) count++;
+                current = current->next;
+            }
+
+            if(count)
+            {
+                std::cout<<"Occurence of the element "<<key<<" is "<<count<<std::endl;
+            }   
+            else
+            {
+                std::cout<<"Sorry! there is no occurence\n";
+            }
+        }
+
 };
 int main()
 {
     LinkedList list;
     list.pushFront(1);
-    list.pushBack(2);
+    list.pushBack(1);
     list.pushAt(3,3);
     list.pushBack(4);
     list.pushAt(5,5);
@@ -329,6 +353,8 @@ int main()
 
 
     list.mid();    
+
+    list.occurence(1);
 
 
     list.show();
