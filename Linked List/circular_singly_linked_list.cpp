@@ -225,6 +225,84 @@ class CircularList
             std::cout<<"Element not found in the list\n";
         }
 
+        /* Detecting loop in a linked list using Flyod's cycle detection algorithm */
+        bool detectCycle()
+        {
+            if(head == nullptr || head == tail) return false;
+
+            Node* slow = head;
+            Node* fast = head;
+
+            while(slow and fast->next)
+            {
+                slow = slow->next;
+                fast = fast->next->next;
+                if(fast == slow)
+                {
+                    std::cout<<"Meeting point "<<slow->data<<std::endl;
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
+        //Finding the length of the loop
+        int loopLength()
+        {
+            if(head == nullptr) return 0;
+
+            Node* slow = head;
+            Node* fast = head;
+
+            while(slow and fast->next)
+            {
+                slow = slow->next;
+                fast = fast->next->next;
+                if(slow == fast)
+                {
+                    int count=0;
+                    do
+                    {
+                        fast = fast->next;
+                        count++;
+                    }while(slow!=fast);
+                    return count;
+                }
+            }
+            return 0;
+        }
+
+        int startOfCycle()
+        {
+            if(head == nullptr || head == tail) return 0;
+
+            Node* slow = head;
+            Node* fast = head;
+
+            while(slow and fast->next)
+            {
+                slow = slow->next;
+                fast = fast->next->next;
+                if(slow == fast)
+                {
+                    slow = head;
+                    while(slow->next and fast->next)
+                    {
+                        slow = slow->next;
+                        fast = fast->next;
+                        if(slow == fast)
+                        {
+                            return fast->data;
+                        }
+                    }
+
+                }
+            }
+
+            return 0;
+        }
+
         //Display List
 
         void show()
@@ -270,5 +348,9 @@ int main()
 
     list.show();
     std::cout<<"Size of the list is "<<list.getSize()<<std::endl;
+    
+    std::cout<<"Does the list contains the loop "<<std::boolalpha<<list.detectCycle()<<std::endl;
+    std::cout<<"Loop length is "<<list.loopLength()<<std::endl;
+    std::cout<<"Starting Node of the loop is "<<list.startOfCycle()<<std::endl;
     return 0;
 }
