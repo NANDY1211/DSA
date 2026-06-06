@@ -290,6 +290,26 @@ class SinglyLinkedList
             }
         }
 
+
+        void findPosition(int value)
+        {
+            if(head==nullptr) return;
+
+            Node* traverse=head;
+            int pos=0;
+            while(traverse)
+            {
+                if(traverse->data==value)
+                {
+                    std::cout<<"Element found at position "<<pos<<std::endl;
+                    return;
+                }
+                pos++;
+                traverse=traverse->next;
+            }
+            std::cout<<"Element is not found in the list"<<std::endl;
+        }
+
 };
 int main()
 {
@@ -314,6 +334,8 @@ int main()
     list.pushBeforeValue(3,2);
     list.pushAfterValue(0,99);
     list.popByValue(5);
+
+    list.findPosition(4);
     list.show();
 
     return 0;
