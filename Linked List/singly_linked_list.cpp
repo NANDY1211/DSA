@@ -151,6 +151,7 @@ class SinglyLinkedList
                     Node* newNode=createNode(data);
                     prev->next=newNode;
                     newNode->next=current;
+                    size_++;
                     return;
                 }
                 prev=prev->next;
@@ -175,6 +176,7 @@ class SinglyLinkedList
                     Node* newNode=createNode(data);
                     newNode->next=current->next;
                     current->next=newNode;
+                    size_++;
                     return;
                 }
                 current=current->next;
@@ -277,6 +279,7 @@ class SinglyLinkedList
                     Node* delNode=prev->next;
                     prev->next=prev->next->next;
                     delete delNode;
+                    size_--;
                     return;
                 }
                 prev=prev->next;
