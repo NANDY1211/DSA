@@ -310,6 +310,27 @@ class SinglyLinkedList
             std::cout<<"Element is not found in the list"<<std::endl;
         }
 
+        void reverse()
+        {
+            if(head==nullptr or head==tail) return;
+
+            Node* prev=nullptr;
+            Node* current=head;
+            Node* after=head->next;
+
+            do
+            {
+                after=current->next;
+                current->next=prev;
+                prev=current;
+                current = head =after;
+            }while(current!=nullptr);
+
+            head=prev;
+
+            
+        }
+
 };
 int main()
 {
@@ -336,6 +357,8 @@ int main()
     list.popByValue(5);
 
     list.findPosition(4);
+
+    list.reverse();
     list.show();
 
     return 0;
