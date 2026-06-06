@@ -1,422 +1,317 @@
 #include <iostream>
 
-//Defining a Singly linked list
+
 struct Node
 {
     int data;
-    Node* next; //Pointer to the next Node
+    Node* next;
 
-    Node(int value) : data(value) , next(nullptr) {}
+    Node(int value) : data(value) , next(nullptr){}
 };
 
-class LinkedList
+
+class SinglyLinkedList
 {
     private:
-    Node* head; //Head pointer to track the start of the node
-    Node* tail; // tail pointer to track the end of the node
-    int length_;
-
+        Node* head;
+        Node* tail;
+        int size_;
     public:
-        LinkedList() : head(nullptr) , tail(nullptr) , length_(0) {}
+        SinglyLinkedList() : head(nullptr) , tail(nullptr) , size_(0) {}
 
-        //CreateNode
-        Node* createNode(int value)
-        {
-            return new Node(value);
-        }
-
-        //clearing the list
         void clear()
         {
-            if(head == nullptr)
-            {
-                std::cout<<"Nothing to clear\n";
-                return;
-            }
-            if(head == tail)
+            if(head == nullptr) return;
+
+            if(head == tail) 
             {
                 delete head;
                 head = tail = nullptr;
+                size_--;
                 return;
             }
 
             Node* traverse = head;
-
-            while(traverse != nullptr)
+            while(traverse)
             {
                 Node* delNode = traverse;
                 traverse = traverse->next;
                 delete delNode;
+                size_--;
             }
-            length_ = 0;
+            head=tail=nullptr;
         }
 
-        //Destructor
-        ~LinkedList()
+
+        ~SinglyLinkedList(){clear();}
+
+
+        Node* createNode(int value) {return new Node(value);}
+
+
+        void show()
         {
-            clear();
+            if(head == nullptr) return;
+
+            Node* traverse = head;
+
+            while(traverse)
+            {
+                std::cout<<traverse->data<<"->";
+                traverse = traverse->next;
+            }
+            std::cout<<"null";
         }
 
-        /* Insertion operation */
 
-        //Inserting node at front
 
         void pushFront(int value)
         {
             if(head == nullptr)
             {
                 Node* newNode = createNode(value);
-                head = tail = newNode;
-                length_++;
+                head=tail=newNode;
+                size_++;
                 return;
             }
 
             Node* newNode = createNode(value);
             newNode->next = head;
             head = newNode;
-            length_++;
+            size_++;
         }
-
-        //Inserting node at back
 
         void pushBack(int value)
         {
             if(head == nullptr)
             {
                 Node* newNode = createNode(value);
-                head = tail = newNode;
-                length_++;
+                head=tail=newNode;
+                size_++;
                 return;
             }
 
             Node* newNode = createNode(value);
-            tail->next = newNode;
-            newNode->next = nullptr;
+            tail->next=newNode;
             tail = newNode;
-            length_++;
+            size_++;
         }
 
-        //Inserting Node at specific position
-        void pushAt(int pos, int value) {
-            if (pos <= 1) { // insert at head
-                pushFront(value);
+        void pushAt(int pos,int value)
+        {
+            if(head == nullptr)
+            {
+                Node* newNode = createNode(value);
+                head=tail=newNode;
+                size_++;
                 return;
             }
 
-            Node* prev = head;
-            for (int i = 1; i < pos - 1 && prev != nullptr; i++) {
-                prev = prev->next;
-            }
+            if(pos<1)
+            {
+                pushFront(value);
+                return;
+            } 
 
-            if (prev == nullptr) {
-                std::cout << "Position exceeds list length, inserting at back\n";
+            if(pos>size_)
+            {
                 pushBack(value);
                 return;
             }
 
+            Node* prev = head;
+            for(int i=1;i<pos and prev;i++)
+            {
+                prev = prev->next;
+            }
+
             Node* newNode = createNode(value);
             newNode->next = prev->next;
-            prev->next = newNode;
-            length_++;
+            prev->next = newNode; 
+            if(prev==tail)
+                tail=newNode;
+            size_++;
+        }
 
-            if (newNode->next == nullptr) { // update tail if inserted at end
-                tail = newNode;
+        void pushBeforeValue(int value,int data)
+        {
+            if(head==nullptr) return;
+
+            if(head->data==value)
+            {
+                pushFront(data);
+                return;
+            }
+            Node*prev=head;
+            Node*current=head->next;
+            while(current and prev)
+            {
+                if(current->data==value)
+                {
+                    Node* newNode=createNode(data);
+                    prev->next=newNode;
+                    newNode->next=current;
+                    return;
+                }
+                prev=prev->next;
+                current=current->next;
+            }
+            if(current==nullptr)
+            {
+                std::cout<<"Value not found"<<std::endl;
+                return;
             }
         }
 
-        /* Removal operation */
+        void pushAfterValue(int value,int data)
+        {
+            if(head == nullptr) return;
 
-        //Remove at front
+            Node* current=head;
+            while(current)
+            {
+                if(current->data==value)
+                {
+                    Node* newNode=createNode(data);
+                    newNode->next=current->next;
+                    current->next=newNode;
+                    return;
+                }
+                current=current->next;
+            }
+            if(current==nullptr)
+            {
+                std::cout<<"Value not found"<<std::endl;
+            }
+        }
+
+        void size()
+        {
+            std::cout<<"Size of the list is "<<size_<<std::endl;
+        }
+
 
         void popFront()
         {
-            if(head == nullptr)
-            {
-                std::cout<<"List is Empty\n";
-                return;
-            }
+            if(head == nullptr) return;
 
-            if(head == tail)
+            if(head==tail)
             {
                 delete head;
-                head = tail = nullptr;
-                length_--;
+                head=tail=nullptr;
+                size_--;
                 return;
             }
 
             Node* delNode = head;
-            head = head->next;
+            head=head->next;
             delete delNode;
-            length_--;
+            size_--;
         }
-
-        //Remove at back
 
         void popBack()
         {
-            if(head == nullptr)
-            {
-                std::cout<<"List is empty\n";
-                return;
-            }
+            if (head == nullptr) return;
 
-            if(head == tail)
-            {
+            if (head == tail) {
                 delete head;
                 head = tail = nullptr;
-                length_--;
+                size_--;
                 return;
             }
 
-            Node* delNode = tail;
             Node* prev = head;
-            while(prev->next!=tail)
-            {
+            Node* delNode = tail;
+            while (prev->next != tail) {
                 prev = prev->next;
             }
-            prev->next = nullptr;
-            tail = prev;
-            delete delNode;
-            length_--;
-        }
 
-        //Remove at specific position
+            prev->next = nullptr;   // disconnect old tail first
+            tail = prev;            // update tail
+            delete delNode;
+            size_--;                // decrement size
+        }
 
         void popAt(int pos)
         {
-            if(head == nullptr)
+            if(head == nullptr) return;
+
+            if(head==tail || pos<1)
             {
-                std::cout<<"List is empty\n";
+                popFront();
                 return;
             }
-            if(head == tail)
+            if(pos>size_)
             {
-                delete head;
-                head = tail = nullptr;
-                length_--;
+                popBack();
                 return;
             }
-            if(pos<1)
+
+            Node* prev = head;
+
+            for(int i=1;i<pos and prev;i++)
+            {
+                prev=prev->next;
+            }
+            Node* current = prev->next;
+            prev->next=current->next;
+            delete current;
+            size_--;
+        }
+
+        void popByValue(int value)
+        {
+            if(head==nullptr) return;
+
+            if(head->data==value)
             {
                 popFront();
                 return;
             }
 
-
-            Node* prev = head;
-
-            for(int i=0;i<pos-1 && prev!=nullptr;i++)
+            Node* prev=head;
+            while(prev)
             {
-                prev = prev->next;
+                if(prev->next->data==value)
+                {
+                    Node* delNode=prev->next;
+                    prev->next=prev->next->next;
+                    delete delNode;
+                    return;
+                }
+                prev=prev->next;
             }
-            if(prev == nullptr)
+            if(prev==nullptr)
             {
-                popBack();
-                return;
-            }
-            Node* after = prev->next;
-            prev->next = after->next;
-            delete after;
-            length_--;
-        }
-
-        //Search in the list
-        void search(int value)
-        {
-            if(head == nullptr)
-            {
-                std::cout<<"List is empty , nothing to search\n";
-                return;
-            }
-
-            Node* traverse = head;
-            int index = 0;
-            while(traverse != nullptr && traverse->data != value)
-            {
-                traverse = traverse->next;
-                index++;
-            }
-            if(traverse == nullptr)
-            {
-                std::cout<<"There is no such value present in list\n";
-                return;
-            }
-
-            std::cout<<"Value "<<value<<" present in the index "<<index<<std::endl;
-        }
-
-        //Reverse 
-        void reverse()
-        {
-            if(head == nullptr)
-            {
-                std::cout<<"List is empty , nothing to be reversed\n";
-                return;
-            }
-
-            Node* prev = nullptr;
-            Node* after = nullptr;
-            Node* current = head;
-            tail = head;
-            while(current!=nullptr)
-            {
-                after = current->next;
-                current->next = prev;
-                prev = current;
-                current = after;
-            }
-
-            head = prev;
-        }
-
-        //Display list
-        void show()
-        {
-            if(head == nullptr)
-            {
-                std::cout<<"List is empty\n";
-                return;
-            }
-
-
-            Node* traverse = head;
-            while(traverse != nullptr)
-            {
-                std::cout<<traverse->data<<"->";
-                traverse = traverse->next;
-            }
-            std::cout<<"NULL\n";
-        }
-
-        //Length of an list
-        int length()
-        {
-            return length_;
-        }
-
-        //Find the middle of the list
-        void mid()
-        {
-            if(head == nullptr || head == tail) return;
-
-            int position = ((length()/2)+1);
-
-            Node* current = head;
-
-            for(int i=1;i<position;i++)
-            {
-                current = current->next;
-            }
-
-            std::cout<<"Middle of the list is "<<current->data<<std::endl;
-
-        }
-
-        //Find Occurence of the element
-        void occurence(int key)
-        {
-            if(key == 0 || head == nullptr) return;
-
-
-            int count = 0;
-
-            Node* current = head;
-            while(current)
-            {
-                if(current->data == key) count++;
-                current = current->next;
-            }
-
-            if(count)
-            {
-                std::cout<<"Occurence of the element "<<key<<" is "<<count<<std::endl;
-            }   
-            else
-            {
-                std::cout<<"Sorry! there is no occurence\n";
+                std::cout<<"Unable to find the value \n";
             }
         }
-
-        //check list is circular
-        void isCircular()
-        {
-            if(head == nullptr) return;
-
-
-            if(tail->next == head) 
-            {
-                std::cout<<"It is circular\n";
-                return;
-            }
-            std::cout<<"It is not circular\n";
-        }
-
-        //Convert single linked list to circular list
-        void convertToCircular()
-        {
-            if(head == nullptr) return;
-
-            tail->next = head;
-        }
-
-        //Convert circular linked list to single linked list
-        void CircularToSingle()
-        {
-            if(head == nullptr) return;
-            
-            if(tail->next == head)
-                tail->next = nullptr;
-        }
-
-
-        //Pairwise swap in linked list
-        void pairSwap()
-        {
-            if(head == nullptr || head->next == nullptr) return;
-
-
-            Node* current = head;
-            Node* adjacent = head->next;
-
-            while(adjacent!=nullptr)
-            {
-                int temp = current->data;
-                current->data = adjacent->data;
-                adjacent->data = temp;
-
-                current = adjacent->next;
-                adjacent = current->next;
-            }
-        }
-
 
 };
 int main()
 {
-    LinkedList list;
-    list.pushFront(1);
+    SinglyLinkedList list;
+    //Insertion
+    list.pushFront(0);
+    list.pushBack(1);
     list.pushBack(2);
+    list.pushBack(5);
     list.pushAt(3,3);
-    list.pushBack(4);
-    list.pushAt(5,5);
+    list.pushAt(4,4);
+    list.pushAt(6,6);
 
+    list.size();
 
+    //Deletion
+    list.popAt(2);
+    list.popFront();
+    list.popBack();
 
-    std::cout<<"Length of the list "<<list.length()<<std::endl;
-
-
-    list.mid();    
-
-    list.occurence(1);
-    list.isCircular();
-    list.convertToCircular();
-    list.isCircular();
-    list.CircularToSingle();
-    list.isCircular();
-
-    list.pairSwap();
-
-
+    list.pushBeforeValue(1,0);
+    list.pushBeforeValue(3,2);
+    list.pushAfterValue(0,99);
+    list.popByValue(5);
     list.show();
+
     return 0;
 }
