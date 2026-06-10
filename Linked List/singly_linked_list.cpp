@@ -331,35 +331,86 @@ class SinglyLinkedList
             
         }
 
+
+        void addList(Node* listHead1,Node* listHead2)
+        {
+            if(listHead1 == nullptr || listHead2 == nullptr) return;
+
+            Node* traverse1 = listHead1;
+            Node* traverse2 = listHead2;
+
+            Node* dummy = createNode(-1);
+            Node* current=dummy;
+
+            int carry=0;
+            while(traverse1!=nullptr || traverse2!=nullptr)
+            {
+                int sum=carry;
+                if(traverse1)
+                {
+                    sum = sum+traverse1->data;
+                }
+                if(traverse2)
+                {
+                    sum = sum+traverse2->data;
+                }
+
+                Node* newNode = createNode(sum%10);
+                carry = sum/10;
+
+                current->next=newNode;
+                current=newNode;
+
+                if(traverse1)
+                {
+                    traverse1=traverse1->next;
+                }
+                if(traverse2)
+                {
+                    traverse2=traverse2->next; 
+                }
+
+                if(carry)
+                {
+                    Node* newNode = createNode(carry);
+                    current->next=newNode;
+                }   
+            }
+
+            head = dummy->next;
+        }
+
+        Node* getHead()
+        {
+            return head;
+        }
+
 };
 int main()
 {
-    SinglyLinkedList list;
-    //Insertion
-    list.pushFront(0);
-    list.pushBack(1);
-    list.pushBack(2);
-    list.pushBack(5);
-    list.pushAt(3,3);
-    list.pushAt(4,4);
-    list.pushAt(6,6);
+    SinglyLinkedList list1;
 
-    list.size();
 
-    //Deletion
-    list.popAt(2);
-    list.popFront();
-    list.popBack();
+    list1.pushFront(5);
+    list1.pushBack(5);
+    list1.show();
 
-    list.pushBeforeValue(1,0);
-    list.pushBeforeValue(3,2);
-    list.pushAfterValue(0,99);
-    list.popByValue(5);
+    std::cout<<"\n";
+    SinglyLinkedList list2;
 
-    list.findPosition(4);
+    list2.pushFront(4);
+    list2.pushBack(7);
+    list2.pushBack(2);
+    list2.pushBack(1);
+    list2.show();
 
-    list.reverse();
-    list.show();
+    std::cout<<"\n";
+
+    SinglyLinkedList list3;
+
+    list3.addList(list1.getHead(),list2.getHead());
+
+    list3.show();
 
     return 0;
 }
