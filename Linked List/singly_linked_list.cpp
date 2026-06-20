@@ -385,32 +385,130 @@ class SinglyLinkedList
             return head;
         }
 
+        void segregateOddAndEvenNodes(Node* list)
+        {
+            if(list==nullptr || list->next==nullptr) return;
+
+
+            Node* odd=head;
+            Node* even=head->next;
+            Node* evenHead=head->next;
+
+            while(even!=nullptr and even->next!=nullptr)
+            {
+                odd->next=odd->next->next;
+                even->next=even->next->next;
+
+
+                odd=odd->next;
+                even=even->next;
+            }
+
+            odd->next=evenHead;
+        }
+
+        void createList(int limit)
+        {
+            for(int i=1;i<=limit;i++)
+            {
+                this->pushBack(i);
+            }
+        }
+
+
+        void createList(int limit,int recurrence)
+        {
+            for(int i=1;i<=recurrence;i++)
+            {
+                int reset=limit;
+                while(reset!=-1)
+                {
+                    this->pushBack(reset);
+                    reset--;
+                }
+            }
+        }
+
+        void sort(Node* list)
+        {
+            if(list==nullptr || list->next==nullptr) return;
+
+            Node* dummyZero=createNode(-1);
+            Node* dummyOne=createNode(-1);
+            Node* dummyTwo=createNode(-1);
+
+            Node* zero=dummyZero;
+            Node* one=dummyOne;
+            Node* two=dummyTwo;
+
+            Node* temp=list;
+
+            while(temp!=nullptr)
+            {
+                if(temp->data==0)
+                {
+                    zero->next=temp;
+                    zero=temp;
+                }
+                else if(temp->data==1)
+                {
+                    one->next=temp;
+                    one=temp;
+                }
+                else if(temp->data==2)
+                {
+                    two->next=temp;
+                    two=temp;
+                }
+                temp=temp->next;
+            }
+
+            zero->next=(dummyOne->next)?dummyOne->next:dummyOne->next;
+            one->next=(dummyTwo->next)?dummyTwo->next:nullptr;
+            two->next=nullptr;
+
+            this->head=dummyZero->next;
+
+            delete dummyZero;
+            delete dummyOne;
+            delete dummyTwo;
+
+        }
+
+        void removeKthFromEnd(Node* head,int k)
+        {
+            if(head==nullptr) return;
+
+            Node* fast=head;
+            Node* slow=head;
+
+            for(int i=0;i<k;i++)
+            {
+                fast=fast->next;
+            }
+            if(fast==nullptr) return;
+
+            while(fast->next!=nullptr)
+            {
+                slow=slow->next;
+                fast=fast->next;
+            }
+
+            Node* delNode=slow->next;
+            slow->next=slow->next->next;
+            delete delNode;
+        }
+
 };
 int main()
 {
     SinglyLinkedList list1;
 
-
-    list1.pushFront(5);
-    list1.pushBack(5);
+    list1.createList(8);
     list1.show();
-
     std::cout<<"\n";
-    SinglyLinkedList list2;
-
-    list2.pushFront(4);
-    list2.pushBack(7);
-    list2.pushBack(2);
-    list2.pushBack(1);
-    list2.show();
-
-    std::cout<<"\n";
-
-    SinglyLinkedList list3;
-
-    list3.addList(list1.getHead(),list2.getHead());
-
-    list3.show();
+    list1.removeKthFromEnd(list1.getHead(),3);
+    list1.show();
 
     return 0;
 }
