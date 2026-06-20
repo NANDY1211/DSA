@@ -332,6 +332,29 @@ class SinglyLinkedList
         }
 
 
+        Node* reverse(Node* list)
+        {
+            if(list==nullptr or list->next==nullptr) return list;
+
+            Node* prev=nullptr;
+            Node* current=list;
+            Node* after=list->next;
+
+            do
+            {
+                after=current->next;
+                current->next=prev;
+                prev=current;
+                current=after;
+            }while(current!=nullptr);
+
+            return prev;
+            
+        }
+
+
+
+
         void addList(Node* listHead1,Node* listHead2)
         {
             if(listHead1 == nullptr || listHead2 == nullptr) return;
@@ -499,16 +522,59 @@ class SinglyLinkedList
             delete delNode;
         }
 
+        void checkPalindrome()
+        {
+            if(head==nullptr) return;
+
+            Node* slow=head;
+            Node* fast=head;
+
+            while(fast->next!=nullptr and fast->next->next!=nullptr)
+            {
+                slow=slow->next;
+                fast=fast->next->next;
+            }
+
+            Node* secondHalf=reverse(slow->next);
+
+            Node* firstTemp=head;
+            Node* secondTemp=secondHalf;
+
+            while(secondTemp!=nullptr)
+            {
+                if(firstTemp->data==secondTemp->data)
+                {
+                    firstTemp=firstTemp->next;
+                    secondTemp=secondTemp->next;
+                }
+                else
+                {
+                    std::cout<<"Not a palindrome\n";
+                    return;
+                }
+            }
+
+            std::cout<<"It is palindrome\n";
+
+        }
+
+
 };
 int main()
 {
     SinglyLinkedList list1;
 
-    list1.createList(8);
+    list1.pushBack(1);
+    list1.pushBack(2);
+    list1.pushBack(3);
+    list1.pushBack(4);
+    list1.pushBack(2);
+    list1.pushBack(1);
     list1.show();
     std::cout<<"\n";
-    list1.removeKthFromEnd(list1.getHead(),3);
-    list1.show();
+    list1.checkPalindrome();
+
+
 
     return 0;
 }
