@@ -558,21 +558,66 @@ class SinglyLinkedList
 
         }
 
+        int addHelper(Node* list)
+        {
+            if(list==nullptr) return 1;
+
+            int carry=addHelper(list->next);
+            list->data+=carry;
+            if(list->data<10)
+            {
+                return 0;
+            }
+            list->data=0;
+            return 1;
+        }
+
+
+        void addOne()
+        {
+            if(head==nullptr) return;
+
+            int carry=addHelper(this->getHead());
+
+            if(carry==1)
+            {
+                Node* newNode=createNode(carry);
+                newNode->next=head;
+                head=newNode;
+            }
+        }
+
+
+        int middle()
+        {
+            if(head==nullptr) return -1;
+
+
+            Node* slow=head;
+            Node* fast=head;
+
+            while(fast!=nullptr and fast->next!=nullptr)
+            {
+                slow=slow->next;
+                fast=fast->next->next;
+            }
+
+            return slow->data;
+        }
+
 
 };
 int main()
 {
     SinglyLinkedList list1;
 
-    list1.pushBack(1);
-    list1.pushBack(2);
-    list1.pushBack(3);
-    list1.pushBack(4);
-    list1.pushBack(2);
-    list1.pushBack(1);
+    list1.createList(6);
+
+
     list1.show();
-    std::cout<<"\n";
-    list1.checkPalindrome();
+
+
+    std::cout<<"\nMiddle of the list is "<<list1.middle()<<std::endl;
 
 
 
